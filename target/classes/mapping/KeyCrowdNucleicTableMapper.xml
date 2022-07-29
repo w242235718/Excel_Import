@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="w301.xyz.excel_import.mapper.KeyCrowdNucleicTableMapper">
+    <insert id="insertExcelDataByBatch">
+        INSERT INTO key_crowd_nucleic_acid_compare(number,districts_counties,crowd_type,`name`,id_card_no,mobile)
+        VALUES (#{item.number},
+                #{item.districtsCounties},
+                #{item.crowdType},
+                #{item.name},
+                #{item.idCardNo},
+                #{item.mobile})
+    </insert>
+
+
+    <select id="getLatestByDate" resultType="w301.xyz.excel_import.po.KeyCrowdNucleicAcid">
+        SELECT
+            user_journey_info.id,
+            user_journey_info.number,
+            user_journey_info.operator,
+            user_journey_info.data_apply_time,
+            user_journey_info.districts_counties,
+            user_journey_info.township,
+            user_journey_info.`name`,
+            user_journey_info.mobile,
+            user_journey_info.id_card_no,
+            user_journey_info.come_xin_time,
+            user_journey_info.source,
+            user_journey_info.base_station_location,
+            user_journey_info.imsi,
+            user_journey_info.create_time,
+            user_journey_info.update_time
+        FROM
+            user_journey_info
+        WHERE
+            user_journey_info.data_apply_time>=#{data} or user_journey_info.create_time>=#{data}
+    </select>
+
+
+
+    <delete id="deleteRepeatableDate">
+        DELETE FROM key_crowd_nucleic_acid_compare kcna
+        WHERE kcna.number>0 AND kcna.create_time>=#{now}
+    </delete>
+
+    <select id="countBeforeOrAfterInsert" resultType="java.lang.Integer">
+        SELECT count(id) totalRow FROM key_crowd_nucleic_acid_compare kcna
+        WHERE kcna.number>0 AND kcna.create_time>=#{now}
+    </select>
+</mapper>

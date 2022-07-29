@@ -1,0 +1,8 @@
+#xzxx
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: m_lezhiyuan
+    password: dA8iz7AoHn%ggAP-ek
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://172.30.0.88:3306/temp?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false

@@ -1,0 +1,16 @@
+spring:
+  profiles:
+    active: dev
+  task:
+    execution:
+      pool:
+        max-size: 8
+        core-size: 4
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: mapping/**.xml
+  type-aliases-package: w301.xyz.excel_import.po
+
+logging:
+  config: classpath:logback/logback-${spring.profiles.active}.xml

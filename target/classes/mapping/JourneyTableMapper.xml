@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="w301.xyz.excel_import.mapper.JourneyTableMapper">
+
+    <select id="getLatestByDate" resultType="w301.xyz.excel_import.po.JourneyInfo">
+        SELECT
+            key_crowd_nucleic_acid_compare.id,
+            key_crowd_nucleic_acid_compare.number,
+            key_crowd_nucleic_acid_compare.districts_counties,
+            key_crowd_nucleic_acid_compare.crowd_type,
+            key_crowd_nucleic_acid_compare.`name`,
+            key_crowd_nucleic_acid_compare.id_card_no,
+            key_crowd_nucleic_acid_compare.mobile,
+            key_crowd_nucleic_acid_compare.create_time,
+            key_crowd_nucleic_acid_compare.update_time
+        FROM
+            key_crowd_nucleic_acid_compare
+        WHERE
+            key_crowd_nucleic_acid_compare.create_time>=#{date}
+    </select>
+    <select id="countBeforeInsert" resultType="w301.xyz.excel_import.po.JourneyInfo">
+        SELECT
+            uji.id,
+            uji.number,
+            uji.data_apply_time,
+            uji.operator,
+            uji.districts_counties,
+            uji.township,
+            uji.`name`,
+            uji.mobile,
+            uji.id_card_no,
+            uji.come_xin_time,
+            uji.source,
+            uji.base_station_location,
+            uji.imsi,
+            uji.create_time,
+            uji.update_time
+        FROM user_journey_info uji
+        WHERE uji.mobile=#{info.mobile} and uji.data_apply_time>=#{info.dataApplyTime} AND operator=#{info.operator}
+    </select>
+
+    <insert id="insertExcelDateByBatch" >
+        INSERT INTO temp.user_journey_info (number,data_apply_time,operator,districts_counties,township,`name`,mobile,id_card_no,come_xin_time,source,base_station_location,imsi,create_time,update_time)
+        VALUES (#{entity.number},
+                #{entity.dataApplyTime},
+                #{entity.operator},
+                #{entity.districtsCounties},
+                #{entity.township},
+                #{entity.name},
+                #{entity.mobile},
+                #{entity.idCardNo},
+                #{entity.comeXinTime},
+                #{entity.source},
+                #{entity.baseStationLocation},
+                #{entity.imsi},
+                current_timestamp,
+                current_timestamp)
+    </insert>
+
+
+
+    <delete id="deleteRepeatableDate">
+        DELETE FROM user_journey_info uji WHERE uji.number>=#{entity.number} AND uji.data_apply_time=#{entity.dataApplyTime} AND operator=#{entity.operator} and create_time>=#{entity.createTime}
+    </delete>
+
+
+
+    <select id="countAfterInsert">
+        SELECT count(id) as totalRow FROM user_journey_info uji
+        WHERE uji.number>=0 and uji.data_apply_time=#{criterion.dataApplyTime} AND operator>=#{criterion.operator}
+    </select>
+</mapper>

@@ -1,0 +1,9 @@
+#local
+spring:
+  datasource:
+    url: jdbc:log4jdbc:mysql://localhost:3306/temp?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    username: root
+    password: root123123
+    type: com.alibaba.druid.pool.DruidDataSource
+
